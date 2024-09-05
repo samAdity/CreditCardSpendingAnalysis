@@ -1,0 +1,140 @@
+# Figure 1: Correlation Heatmap showing relationships between numerical features
+sns.heatmap(df.corr(), annot=True)
+
+# Figure 2: Pie Chart showing the distribution of different Card Types
+l = ["Silver", "Signature", "Platinum", "Gold"]
+x = df["Card Type"].value_counts()
+plt.figure(figsize=(8, 8))
+colors = ['pink', 'purple', 'red', 'yellow']
+plt.pie(x, labels=l, shadow=True, autopct="%0.0f%%", textprops={'fontsize': 20}, wedgeprops={"width": 0.6}, colors=colors)
+plt.legend(loc='center right', bbox_to_anchor=(1.3, 0.6))
+
+# Figure 3: Bar Plot showing the count of different Expenditure Types
+plt.figure(figsize=(8, 8))
+sns.countplot(x="Exp Type", hue="Exp Type", data=df, edgecolor="black")
+plt.legend(loc='center right', bbox_to_anchor=(1.3, 0.6))
+
+#  Pie Chart showing Gender distribution in credit card spending
+gen = ["Female", "Male"]
+gender = df["Gender"].value_counts()
+plt.figure(figsize=(8, 8))
+plt.pie(gender, labels=gen, shadow=True, autopct="%0.0f%%", textprops={"fontsize": 20}, colors=["pink", "blue"], wedgeprops={'width': 0.5})
+plt.legend()
+
+# Figure 5: Bar Plot showing the count of transactions per month
+plt.figure(figsize=(8, 8))
+sns.countplot(x="Month", data=df, edgecolor="black", palette="Set2")
+plt.xticks(rotation=90)
+
+# Figure 6: Bar Plot showing the count of transactions per day of the week
+plt.figure(figsize=(8, 8))
+sns.countplot(x="Day", data=df, edgecolor="black", palette="Set1")
+plt.xticks(rotation=90)
+
+# Figure 7: Pie Chart showing the distribution of Card Types by Gender
+plt.figure(figsize=(8, 8))
+sns.countplot(x="Card Type", hue="Gender", data=df, palette=["pink", "blue"], edgecolor="black")
+
+# Figure 8: Bar Plot showing the total amount spent by Gender
+plt.figure(figsize=(8, 8))
+sns.barplot(x="Gender", y="Amount", data=df, estimator=sum, palette=["pink", "blue"], edgecolor="black")
+
+# Figure 9: Bar Plot showing the total amount spent by Gender and Expenditure Type
+plt.figure(figsize=(10, 10))
+sns.barplot(x="Exp Type", y="Amount", hue="Gender", data=df, estimator=sum, edgecolor="black", palette=["red", "yellow"])
+
+# Figure 10: Bar Plot showing total amount spent by Gender per Month
+plt.figure(figsize=(14, 14))
+sns.barplot(x="Gender", y="Amount", hue="Month", data=df, estimator=sum, edgecolor="black")
+
+# Figure 11: Bar Plot showing total amount spent by Gender per Day
+plt.figure(figsize=(14, 14))
+sns.barplot(x="Gender", y="Amount", hue="Day", data=df, estimator=sum, edgecolor="black")
+
+# Figure 12: Line Plot showing Male spending trends by Month and Expenditure Type
+male = df[df['Gender'] == 'Male']
+plt.figure(figsize=(5, 5))
+sns.lineplot(x='Month', y='Amount', data=male, hue='Exp Type', ci=None, estimator=sum)
+plt.show()
+
+# Figure 13: Line Plot showing overall spending trends by Month and Expenditure Type
+plt.figure(figsize=(14, 14))
+sns.lineplot(x='Month', y='Amount', data=df, hue='Exp Type', ci=None, estimator=sum)
+
+# Figure 14: Bar Plot showing count of Expenditure Types on Weekdays
+plt.figure(figsize=(8, 8))
+sns.countplot(x="Exp Type", data=week_df, edgecolor="black", palette="Set2")
+plt.xticks(rotation=90)
+
+# Figure 15: Bar Plot showing count of Expenditure Types on Weekends
+plt.figure(figsize=(8, 8))
+sns.countplot(x="Exp Type", data=weekend_df, edgecolor="black", palette="Set1")
+plt.xticks(rotation=90)
+
+# Figure 16: Bar Plot showing total amount spent by Gender and Expenditure Type on Weekdays
+plt.figure(figsize=(10, 10))
+sns.barplot(x="Exp Type", y="Amount", hue="Gender", data=week_df, edgecolor="black", estimator=sum)
+plt.xticks(rotation=90)
+
+# Figure 17: Bar Plot showing total amount spent by Gender and Expenditure Type on Weekends
+plt.figure(figsize=(10, 10))
+sns.barplot(x="Exp Type", y="Amount", hue="Gender", data=weekend_df, edgecolor="black", estimator=sum)
+plt.xticks(rotation=90)
+
+# Figure 18: Bar Plot showing the top 10 cities by total amount spent
+x = df.groupby("City")["Amount"].sum().sort_values(ascending=False).reset_index().head(10)
+plt.figure(figsize=(10, 10))
+sns.barplot(x="City", y="Amount", data=x, edgecolor="black", palette="Set2")
+plt.xticks(rotation=90)
+
+# Figure 19: Line Plot showing the total amount spent per Day by Gender
+plt.figure(figsize=(10, 10))
+sns.relplot(x="Day", y="Amount", data=df, kind="line", hue="Gender", height=10)
+plt.xticks(rotation=90)
+
+# Figure 20: Pie Chart showing the distribution of Card Types for Female customers
+female = df[df["Gender"] == "Female"]
+x = female.groupby("Card Type")["Amount"].sum().sort_values(ascending=False)
+l = ["Silver", "Signature", "Platinum", "Gold"]
+plt.figure(figsize=(8, 8))
+plt.pie(x, labels=l, shadow=True, autopct="%0.01f%%", textprops={"fontsize": 20}, wedgeprops={"width": 0.10}, explode=[0.1, 0.1, 0.1, 0.1])
+plt.legend(loc='center right', bbox_to_anchor=(1.3, 0.6))
+
+# Figure 21: Pie Chart showing the distribution of Card Types for Male customers
+male = df[df["Gender"] == "Male"]
+m = male.groupby("Card Type")["Amount"].sum().sort_values(ascending=False)
+l = ["Platinum", "Silver", "Signature", "Gold"]
+plt.figure(figsize=(8, 8))
+plt.pie(m, labels=l, shadow=True, autopct="%0.01f%%", textprops={"fontsize": 20}, wedgeprops={"width": 0.10}, explode=[0.1, 0.1, 0.1, 0.1])
+plt.legend(loc='center right', bbox_to_anchor=(1.3, 0.6))
+
+# Figure 22: Line Plot showing total spending per Month by Gender
+plt.figure(figsize=(10, 10))
+sns.relplot(x="Month", y="Amount", data=df, kind="line", hue="Gender", height=10)
+plt.xticks(rotation=90)
+
+# Figure 23: Pie Chart showing the top 5 cities by amount spent for Female customers
+fe = female.groupby("City")["Amount"].sum().sort_values(ascending=False).head(5)
+plt.figure(figsize=(8, 8))
+plt.pie(fe, labels=female.groupby("City")["Amount"].sum().sort_values(ascending=False).head(5).index, shadow=True, autopct="%0.01f%%", textprops={"fontsize": 20}, wedgeprops={'width': 0.8}, explode=[0.1, 0.1, 0.1, 0.1, 0.1])
+plt.legend(loc='center right', bbox_to_anchor=(1.3, 0.6))
+
+# Figure 24: Pie Chart showing the top 5 cities by amount spent for Male customers
+ma = male.groupby("City")["Amount"].sum().sort_values(ascending=False).head(5)
+plt.figure(figsize=(8, 8))
+plt.pie(ma, labels=male.groupby("City")["Amount"].sum().sort_values(ascending=False).head(5).index, shadow=True, autopct="%0.01f%%", textprops={"fontsize": 20}, wedgeprops={'width': 0.8}, explode=[0.1, 0.1, 0.1, 0.1, 0.1])
+plt.legend(loc='center right', bbox_to_anchor=(1.3, 0.6))
+
+# Figure 25: Bar Plot showing total amount spent by Expenditure Type
+plt.figure(figsize=(10, 10))
+sns.barplot(x="Exp Type", y="Amount", edgecolor="black", data=df, estimator=sum, palette="Set3")
+
+# Figure 26: WordCloud displaying the most frequent cities in spending
+from wordcloud import WordCloud as word
+d = df["City"].value_counts()
+wc = word(background_color='white', width=1000, height=600)
+wc.generate_from_frequencies(d)
+plt.figure(figsize=(15, 15), dpi=100)
+plt.imshow(wc)
+plt.axis('off')
+plt.show()
